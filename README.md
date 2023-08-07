@@ -1,7 +1,7 @@
 
 # Signal Scan and Jammer Detection 
 
-This is a Wi-Fi jammer detection application designed to monitor and detect potential Wi-Fi jamming events. The application runs on a Raspberry Pi and continuously scans nearby Wi-Fi networks, calculates moving averages, and sends Wi-Fi signal data to a server for analysis. When potential jamming is detected, alerts are sent to the server.
+This is a Wi-Fi jammer detection application designed to monitor and detect potential Wi-Fi jamming events, it is also wifi scanner or can be made to cellphone scanner sniffing for ssid/mac addresses . The application runs on a Raspberry Pi and continuously scans nearby Wi-Fi networks, calculates moving averages, and sends Wi-Fi signal data to a server for analysis. When potential jamming is detected, alerts are sent to the server.
 
 ## Features
 
