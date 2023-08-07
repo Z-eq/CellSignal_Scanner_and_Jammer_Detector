@@ -6,7 +6,7 @@ import os
 # Set up Flask and database
 app = Flask(__name__)
 
-# Set the secret key ( Don't foget to chage this later)
+# Set the secret key ( Don't foget to change this to secret key aor random ! for development version)
 app.secret_key = 'temporary_secret_key'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///wifis.db')
