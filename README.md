@@ -15,7 +15,7 @@ This is a Wi-Fi jammer detection application designed to monitor and detect pote
 
 ## Requirements
 
-- Raspberry Pi with Wi-Fi capabilities /ESP8266 or other device with Linux ).
+- Raspberry Pi with Wi-Fi capabilities or any device with Linux ( Have not tested on windows but i think it will run on it aswell).
 - Python 3 and the following Python packages:
   - requests
   - time
