@@ -1,0 +1,150 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <!-- Main heading -->
+    <h2 class="mb-3">
+        <i data-feather="wifi"></i>
+        Wi-Fi Scanner
+    </h2>
+
+    <!-- Lead paragraph -->
+    <p class="lead">This page displays information about network scanning.</p>
+
+    <!-- Saved Wi-Fi Data section -->
+    <div class="row">
+        <div class="col">
+            <!-- Heading for the Saved Wi-Fi Data section -->
+            <h3>Saved Wi-Fi Data</h3>
+
+            <!-- Form for deleting Wi-Fi data -->
+            <form action="/delete_wifi_data" method="post">
+                <table class="table table-striped">
+                    <!-- Table header -->
+                    <thead>
+                        <tr>
+                            <!-- Checkbox to select all Wi-Fi data -->
+                            <th scope="col"><input id="selectAllCheckbox" type="checkbox"/></th>
+
+                            <!-- Columns for Wi-Fi data information -->
+                            <th scope="col"><i data-feather="wifi"></i> ESSID</th>
+                            <th scope="col"><i data-feather="map-pin"></i> Address</th>
+                            <th scope="col"><i data-feather="bar-chart-2"></i> RSSI</th>
+                            <th scope="col"><i data-feather="trash-2"></i></th>
+                            <th scope="col"><i data-feather="eye"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for wifi in saved_wifis %}
+                            <!-- Table rows for each Wi-Fi entry -->
+                            <tr>
+                                <!-- Checkbox for selecting individual Wi-Fi data -->
+                                <td><input name="wifi_ids" type="checkbox" value="{{ wifi.id }}"/></td>
+
+                                <!-- Display Wi-Fi data information -->
+                                <td>{{ wifi.ssid }}</td>
+                                <td>{{ wifi.address }}</td>
+                                <td>{{ wifi.rssi }}</td>
+
+                                <!-- Delete button for each Wi-Fi data entry -->
+                                <td>
+                                    <button class="btn btn-primary btn-sm delete-button" type="button" data-id="{{ wifi.id }}">
+                                        <i data-feather="trash-2"></i>
+                                    </button>
+                                </td>
+
+                                <!-- "Watch" button for each Wi-Fi data entry -->
+                                <td>
+                                    <a href="/add_to_watchlist?ssid={{ wifi.ssid }}&address={{ wifi.address }}" class="btn btn-primary btn-sm add-to-watchlist-button">
+                                        <i data-feather="eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <!-- Button to delete selected Wi-Fi data entries -->
+                <input class="btn btn-delete-selected" id="deleteButton" type="submit" value="Delete Selected"/>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add to Watchlist section -->
+<div class="row mt-5">
+    <div class="col">
+        <!-- Heading for the Add to Watchlist section -->
+        <h3>Add to Watchlist</h3>
+
+        <!-- Form for adding Wi-Fi data to Watchlist -->
+        <form action="/add_to_watchlist" method="post">
+            <div class="form-group">
+                <label for="ssid">SSID:</label>
+                <!-- Add 'required' attribute here -->
+                <input class="form-control" id="ssid" name="ssid" type="text" required/>
+            </div>
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <!-- Add 'required' attribute here -->
+                <input class="form-control" id="address" name="address" type="text" required/>
+            </div>
+            <div class="form-group">
+                <!-- Button to add Wi-Fi data to Watchlist -->
+<input class="btn btn-add-watchlist custom-btn" type="submit" value="Add to Watchlist"/>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <!-- The Watchlist section -->
+    <div class="row mt-5">
+        <div class="col">
+            <!-- Heading for The Watchlist section -->
+            <h3>The Watchlist</h3>
+
+            <!-- Form for removing Wi-Fi data from Watchlist -->
+            <form action="/remove_from_watchlist" method="post">
+                <table class="table table-striped">
+                    <!-- Table header for The Watchlist section -->
+                    <thead>
+                        <tr>
+                            <!-- Checkbox to select all Wi-Fi data in Watchlist -->
+                            <th scope="col"><input id="selectAllWatchlistCheckbox" type="checkbox"/></th>
+
+                            <!-- Columns for Wi-Fi data information in Watchlist -->
+                            <th scope="col"><i data-feather="wifi"></i> ESSID</th>
+                            <th scope="col"><i data-feather="map-pin"></i> Address</th>
+                            <th scope="col"><i data-feather="settings"></i> Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in watchlist %}
+                            <!-- Table rows for each Wi-Fi entry in Watchlist -->
+                            <tr>
+                                <!-- Checkbox for selecting individual Wi-Fi data in Watchlist -->
+                                <td><input name="watchlist_ids" type="checkbox" value="{{ item.id }}"/></td>
+
+                                <!-- Display Wi-Fi data information in Watchlist -->
+                                <td>{{ item.ssid }}</td>
+                                <td>{{ item.address }}</td>
+
+                               <!-- "Delete" button for each Wi-Fi data entry in Watchlist -->
+<td>
+    <button class="btn btn-primary btn-sm delete-watchlist-button" type="button" data-id="{{ item.id }}">
+        <i data-feather="trash"></i>
+        Delete
+    </button>
+</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <!-- Button to delete selected Wi-Fi data entries in Watchlist -->
+                <input class="btn btn-delete-selected" id="deleteSelectedButton" type="submit" value="Delete Selected"/>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+

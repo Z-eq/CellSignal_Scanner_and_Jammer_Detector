@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="list-group">
+                    <a href="/scanner" class="list-group-item list-group-item-action">
+                        <i data-feather="activity"></i> Scanner
+                    </a>
+                    <a href="/jammer" class="list-group-item list-group-item-action">
+                        <i data-feather="cpu"></i> Jammer Data
+                    </a>
+                    <a href="/bluetooth-scanner" class="list-group-item list-group-item-action">
+                        <i data-feather="radio"></i> Bluetooth Scanner
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <!-- Add any additional content for the home page here -->
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

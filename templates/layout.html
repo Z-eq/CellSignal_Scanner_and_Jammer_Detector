@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- Feather Icons CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-dark bg-dark">
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+                <i data-feather="shield"></i>
+                Cybersecurity Router Login
+            </a>
+        </nav>
+    </header>
+    <main class="container mt-4">
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="footer mt-auto py-3 bg-dark text-white">
+        <div class="container text-center">
+            © 2023 Cybersecurity Router Login
+        </div>
+    </footer>
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"></script>
+    <script>feather.replace()
+    </script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
+

@@ -1,0 +1,93 @@
+/* Set the body to flex container with column layout, filling the viewport height */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa; /* Set the background color */
+}
+
+/* Add a border at the bottom of the navbar */
+.navbar {
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* Set the 'main' element to flex-grow 1 to occupy available space */
+.main {
+    flex: 1;
+}
+
+/* Add a border at the top of the footer */
+.footer {
+    border-top: 1px solid #dee2e6;
+}
+
+/* Add margin to the table */
+.table {
+    margin-top: 2rem;
+}
+
+/* Apply styles to table headers */
+.table th {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.8rem;
+}
+
+/* Apply styles to buttons inside the table */
+.table .btn {
+    margin-right: 0.5rem;
+}
+
+/* Apply styles to lead paragraphs */
+.lead {
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    font-weight: 300;
+}
+
+/* Apply styles to h2 headings */
+h2 {
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+/* Add to Watchlist button The Watchlist section*/
+.custom-btn {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+
+/* Style for the "Delete Selected" button */
+.btn-delete-selected {
+    background-color: #dc3545; /* Red background color */
+    color: white; /* White text color */
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+/* Style for the "Delete Selected" button on hover */
+.btn-delete-selected:hover {
+    background-color: white; /* White background color on hover */
+    color: black; /* Black text color on hover */
+    border: 2px solid #dc3545; /* Red border on hover */
+}
+
