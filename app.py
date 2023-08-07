@@ -5,6 +5,10 @@ import os
 
 # Set up Flask and database
 app = Flask(__name__)
+
+# Set the secret key ( Don't foget to chage this later)
+app.secret_key = 'temporary_secret_key'
+
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///wifis.db')
 db = SQLAlchemy(app)
 
@@ -25,7 +29,6 @@ if __name__ == '__main__':
 
     # Run the app on the local network interface with debug mode enabled
     socketio.run(app, host=host, port=port, debug=True)
-
 
 
 
