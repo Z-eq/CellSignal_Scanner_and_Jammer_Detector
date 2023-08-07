@@ -3,7 +3,7 @@ from datetime import datetime
 from flask_socketio import emit
 from models import WifiData, Watchlist, JammingEvent
 from app import app, db, socketio
-
+from flask import flash
 # Home route
 @app.route('/')
 def home():
@@ -19,31 +19,43 @@ def scanner():
 # Save Wi-Fi data route
 @app.route('/save', methods=['POST'])
 def save():
-    data = request.form
-    ssid = data['ssid']
-    address = data['address']
-    rssi = data['rssi']
+    try:
+        data = request.form
+        ssid = data['ssid']
+        address = data['address']
+        rssi = data['rssi']
 
-    existing_wifi_data = WifiData.query.filter_by(ssid=ssid, address=address).first()
-    if existing_wifi_data is None:
-        wifi_data = WifiData(ssid=ssid, address=address, rssi=rssi)
-        db.session.add(wifi_data)
-    else:
-        existing_wifi_data.rssi = rssi
+        existing_wifi_data = WifiData.query.filter_by(ssid=ssid, address=address).first()
+        if existing_wifi_data is None:
+            wifi_data = WifiData(ssid=ssid, address=address, rssi=rssi)
+            db.session.add(wifi_data)
+        else:
+            existing_wifi_data.rssi = rssi
 
-    db.session.commit()
-    return jsonify(success=True)
+        db.session.commit()
+        flash("Wi-Fi data saved successfully!", "success")
+        return jsonify(success=True)
+
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Error saving Wi-Fi data: {str(e)}", "danger")
+        return jsonify(success=False, error=str(e))
+
 
 # Delete Wi-Fi data route
+
 @app.route('/delete_wifi_data', methods=['POST'])
 def delete_wifi_data():
-    wifi_ids = request.form.getlist('wifi_ids')
-    for wifi_id in wifi_ids:
-        wifi_data = WifiData.query.get(wifi_id)
-        if wifi_data:
-            db.session.delete(wifi_data)
-            db.session.commit()
+    try:
+        wifi_ids = request.form.getlist('wifi_ids')
+        WifiData.query.filter(WifiData.id.in_(wifi_ids)).delete(synchronize_session='fetch')
+        db.session.commit()
+        flash("Wi-Fi data deleted successfully!", "success")
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Error deleting Wi-Fi data: {str(e)}", "danger")
     return redirect(url_for('scanner'))
+
 
 # Add to Watchlist route
 @app.route('/add_to_watchlist', methods=['GET', 'POST'])
@@ -160,9 +172,6 @@ def get_latest_signal_data():
             "moving_avg": "N/A"
         })
 
-
-
-
 # Get latest jamming events route
 @app.route('/get_latest_jamming_events')
 def get_latest_jamming_events():
@@ -205,3 +214,5 @@ def continuous_update():
 
     return {"message": "Continuous update received"}, 200
 
+if __name__ == '__main__':
+    socketio.run(app)
