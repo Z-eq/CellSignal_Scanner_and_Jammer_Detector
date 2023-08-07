@@ -26,6 +26,8 @@ This is a Wi-Fi jammer detection application designed to monitor and detect pote
 - Flask and Flask-SocketIO for the web interface.
 - A server to receive and analyze Wi-Fi signal data.
 
+- It is built using Python and utilizes the pcapy library for efficient Wi-Fi signal monitoring. Alternatively, you could use the more comprehensive scapy library   to access higher-level functionalities related to network packet manipulation.
+
 ## Installation
 
 1. Clone the repository to your Raspberry Pi.
