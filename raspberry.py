@@ -5,14 +5,14 @@ import re
 import statistics
 
 # Replace with your Wi-Fi SSID and password
-ssid = "YOURWIFI"
-password = "YOURPASSWORD"
+ssid = "YOURSSIDHERE"
+password = "WIFIPASSWORDHERE"
 
 # Replace with your server URL or IP address
 server_url = "http://192.168.1.237:5000"
 
 # Replace with the correct Wi-Fi interface name
-interface = "wlan1" 
+interface = "wlan1"
 
 # Global variables for Wi-Fi jamming detection
 window_size = 10
@@ -144,83 +144,63 @@ def main():
         min_strength = 1000  # start with a high value
 
         while True:
-            # Get the current signal strength
             current_strength = get_signal_strength(interface)
-
-            # Update min_strength
-            if current_strength is not None and current_strength < min_strength:
-                min_strength = current_strength
-
+            
             if current_strength is not None:
+                min_strength = min(min_strength, current_strength)
                 print(f"Current Signal Strength: {current_strength} dBm")
 
-                # Update the moving average window
                 moving_average_window.append(current_strength)
                 if len(moving_average_window) > window_size:
                     moving_average_window.pop(0)
 
-                # Calculate the moving average
                 moving_avg = sum(moving_average_window) / len(moving_average_window)
                 print(f"Moving Average: {moving_avg:.2f} dBm")
 
-                # Send continuous update to the server
-                data = {
-                    'current_strength': current_strength,
-                    'moving_avg': moving_avg,
-                }
-                try:
-                    response = requests.post(f"{server_url}/continuous_update", json=data)
-                    if response.status_code == 200:
-                        print("Continuous update sent to server successfully")
-                    else:
-                        print(f"Error on sending continuous update to server: {response.status_code}")
-                except requests.exceptions.RequestException as e:
-                    print(f"Error sending continuous update to server: {e}")
+                send_continuous_update(current_strength, moving_avg)  # Separate function for clarity
 
-                # 3. Introduce multiple thresholds for warning and alert.
-                if len(moving_average_window) >= 2:
-                    std_dev = statistics.stdev(moving_average_window)
-                    warning_threshold = moving_avg - (0.5 * threshold_multiplier * std_dev)
-                    alert_threshold = moving_avg - threshold_multiplier * std_dev
+                # Check for jamming immediately
+                if check_for_jamming(current_strength, moving_avg):  # Returns True if jamming detected
+                    continue  # Skip the rest of the loop and start next iteration
 
-                    if current_strength < warning_threshold:
-                        print("Warning: Potential jamming detected!")
-                    if current_strength < alert_threshold:
-                        print("Alert: Jamming detected!")
-                        # Send alert logic here
-
-                # 4. Monitor visible Wi-Fi networks and use it as an additional indicator.
-                visible_networks_count = get_visible_wifi_networks_count()
-                if visible_networks_count < 3:  # Example threshold
-                    print("Warning: Fewer Wi-Fi networks detected!")
-
-                # 5. Monitor packet loss using ping tests.
-                packet_loss = get_packet_loss_to_gateway()
-                if packet_loss > 30:  # Example threshold
-                    print("Warning: High packet loss detected!")
-
-                # Check for jamming
-                if len(moving_average_window) >= 2:
-                    std_dev = statistics.stdev(moving_average_window)
-                    threshold = moving_avg - (threshold_multiplier * std_dev)
-                    if current_strength < threshold:
-                        print("Jamming detected!")
-                        timestamp = int(time.time())
-                        send_jamming_alert_to_server(timestamp, current_strength, moving_avg)
-                    else:
-                        print("No jamming detected")
-                else:
-                    print("Not enough data points for jamming detection.")
+                scan_wifi()
+                time.sleep(2)  # Reduced sleep time
             else:
                 print("Signal strength not available")
 
-            # Scan for nearby Wi-Fi networks
-            scan_wifi()
-            # Sleep for 5 seconds before the next iteration
-            time.sleep(5)
     except KeyboardInterrupt:
         print("Jammer stopped")
 
+def send_continuous_update(current_strength, moving_avg):
+    data = {
+        'current_strength': current_strength,
+        'moving_avg': moving_avg,
+    }
+    try:
+        response = requests.post(f"{server_url}/continuous_update", json=data)
+        if response.status_code == 200:
+            print("Continuous update sent to server successfully")
+        else:
+            print(f"Error on sending continuous update to server: {response.status_code}")
+    except requests.exceptions.RequestException as e:
+        print(f"Error sending continuous update to server: {e}")
+
+def check_for_jamming(current_strength, moving_avg):
+    if len(moving_average_window) < 2:
+        print("Not enough data points for jamming detection.")
+        return False
+
+    std_dev = statistics.stdev(moving_average_window)
+    threshold = moving_avg - (threshold_multiplier * std_dev)
+
+    if current_strength < threshold:
+        print("Jamming detected!")
+        timestamp = int(time.time())
+        send_jamming_alert_to_server(timestamp, current_strength, moving_avg)
+        return True
+    else:
+        print("No jamming detected")
+        return False
+
 if __name__ == "__main__":
     main()
-
