@@ -201,6 +201,3 @@ def check_for_jamming(current_strength, moving_avg):
     else:
         print("No jamming detected")
         return False
-
-if __name__ == "__main__":
-    main()
