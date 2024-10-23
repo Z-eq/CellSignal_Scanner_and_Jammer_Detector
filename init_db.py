@@ -1,7 +1,6 @@
 from app import db, app
 from models import WifiData, JammingEvent  # Import JammingEvent
 
-
 def create_tables():
     with app.app_context():
         db.create_all()
@@ -12,6 +11,3 @@ def create_tables():
         db.session.add(wifi1)
         db.session.add(wifi2)
         db.session.commit()
-
-if __name__ == "__main__":
-    create_tables()
