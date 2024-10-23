@@ -213,6 +213,3 @@ def continuous_update():
     emit('continuous_update', data, broadcast=True, namespace='')
 
     return {"message": "Continuous update received"}, 200
-
-if __name__ == '__main__':
-    socketio.run(app)
